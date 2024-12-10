@@ -5,5 +5,5 @@ const cors = require('cors')
 app.use(cors())
 
 app.listen('3002',()=>{
-    console.log("server is running on port 3001")
+    console.log("server is running on port 3002")
 })
