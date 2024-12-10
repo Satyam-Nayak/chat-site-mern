@@ -17,4 +17,37 @@ body{
   border-radius: 10px;
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.logIn input{
+  margin: 10px;
+  width: 200px;
+  height: 40px;
+  border: 5px solid #0091ff;
+  background-color: transparent;
+  padding-left: 10px;
+  color: white;
+  font-size: 17px;
+}
+
+.logIn input:focus{
+  outline: none;
+
+}
+
+.logIn button{
+  width: 200px;
+  height: 50px;
+  border: none;
+  background-color: #0091ff;
+  color: white;
+  font-size: 16px;
+  margin-top: 45px;
+}
+
+.logIn button:hover{
+  cursor: pointer;
+  background-color: #005a9f;
 }
