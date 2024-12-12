@@ -10,19 +10,19 @@ app.use(express.json()) // this allows us to send information from frontend to b
 
 const server = app.listen('3002',()=>{
     console.log("server is running on port 3002")
-})
+});
 
-io = socket(server)
+io = socket(server);
 
 io.on('connection', (socket) => {
-    console.log(socket.id)
+    console.log(socket.id);
 
-    socket.on('join_room', (data)=>{
+    socket.on('join_room', (data) => {
         socket.join(data);
         console.log("User Joined Room: " + data);
-    })
+    });
 
-    socket.on('disconnect',()=>{
-        console.log('User Disconnect..')
-    })
-})
+    socket.on('disconnect',() => {
+        console.log('User Disconnect..');
+    });
+});
