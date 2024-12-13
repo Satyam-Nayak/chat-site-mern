@@ -8,9 +8,9 @@ const CONNECTION_PORT = "localhost:3002/";
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
 
-  const [room, setRoom] = useState("");
+  const [room, setRoom] = useState('');
 
-  const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState('');
 
   useEffect(() => {
     socket = io(CONNECTION_PORT);
@@ -24,8 +24,8 @@ const connectToRoom = () => {
       {!loggedIn ? (
         <div className="logIn">
           <div className='inputs'>
-          <input type='text' placeholder='Name.....' onChange={(e)=>setUserName(e.target.value)}/>
-          <input type='text' placeholder='Room.....' onChange={(e)=>setRoom(e.target.value)}/>
+          <input type='text' placeholder='Name.....' onChange={(e)=>{setUserName(e.target.value)}}/>
+          <input type='text' placeholder='Room.....' onChange={(e)=>{setRoom(e.target.value)}}/>
           </div>
           <button onClick={connectToRoom}>Enter Chat</button>
         </div>
