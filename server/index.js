@@ -1,28 +1,31 @@
-const express = require ('express')
-const socket = require('socket.io')
-const app = express()
-const cors = require('cors');
 
 
-app.use(cors());
-app.use(express.json()) // this allows us to send information from frontend to backend
+
+// const express = require ('express')
+// const socket = require('socket.io')
+// const app = express()
+// const cors = require('cors');
 
 
-const server = app.listen('3002',()=>{
-    console.log("server is running on port 3002")
-});
+// app.use(cors());
+// app.use(express.json()); // this allows us to send information from frontend to backend
 
-io = socket(server);
 
-io.on('connection', (socket) => {
-    console.log(socket.id);
+// const server = app.listen("5002",() => {
+//     console.log("server is running on port 5002....")
+// });
 
-    socket.on('join_room', (data) => {
-        socket.join(data);
-        console.log("User Joined Room: " + data);
-    });
+// io = socket(server);
 
-    socket.on('disconnect',() => {
-        console.log('User Disconnect..');
-    });
-});
+// io.on("connection", (socket) => {
+//     console.log(socket.id);
+
+//     socket.on("join_room", (data) => {
+//         socket.join(data);
+//         console.log("User Joined Room: " + data);
+//     });
+
+//     socket.on("disconnect",() => {
+//         console.log("User Disconnect..");
+//     });
+// });
