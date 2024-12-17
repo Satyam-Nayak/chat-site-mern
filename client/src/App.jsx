@@ -1,150 +1,95 @@
-// import React, { useEffect, useState } from "react";
-// import io from "socket.io-client";
-// import "./App.css";
-
-// let socket;
-// const CONNECTION_PORT = "http://localhost:5002"; // Backend server URL
-
-// function App() {
-//   const [loggedIn, setLoggedIn] = useState(false);
-//   const [room, setRoom] = useState("");
-//   const [userName, setUserName] = useState("");
-
-//   useEffect(() => {
-//     // Establish socket connection
-//     socket = io(CONNECTION_PORT);
-
-//     // Debug: Check connection status
-//     socket.on("connect", () => {
-//       console.log("Connected to server with socket ID: " + socket.id);
-//     });
-
-//     socket.on("connect_error", (err) => {
-//       console.error("Socket connection error:", err);
-//     });
-
-//     return () => {
-//       socket.disconnect(); // Clean up socket connection on unmount
-//     };
-//   }, []);
-
-//   const connectToRoom = () => {
-//     if (room && userName) {
-//       console.log(`Attempting to connect to room: ${room}`); // Debug log
-//       socket.emit("join_room", room);
-//       setLoggedIn(true);
-//     } else {
-//       alert("Please enter a valid username and room name.");
-//     }
-//   };
-
-//   return (
-//     <div className="App">
-//       {!loggedIn ? (
-//         <div className="logIn">
-//           <div className="inputs">
-//             <input
-//               type="text"
-//               placeholder="Name....."
-//               onChange={(e) => setUserName(e.target.value)}
-//             />
-//             <input
-//               type="text"
-//               placeholder="Room....."
-//               onChange={(e) => setRoom(e.target.value)}
-//             />
-//           </div>
-//           <button onClick={connectToRoom}>Enter Chat</button>
-//         </div>
-//       ) : (
-//         <h1>You have joined the room: {room}</h1>
-//       )}
-//     </div>
-//   );
-// }
-
-// export default App;
-
-
-
-////////////////////////////// -----------------
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import  io  from "socket.io-client";
 import './App.css';
 
 let socket;
-const CONNECTION_PORT = "localhost:5002/";
+const CONNECTION_PORT = "http://localhost:5002";
+
 
 
 function App() {
   // Before you logged in 
   const [loggedIn, setLoggedIn] = useState(false);
-  const [room, setRoom] = useState("Class of 2025");
+  const [room, setRoom] = useState("");
   const [userName, setUserName] = useState("");
 
   // After logged in
   const [message, setMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
 
+
+  const messagesEndRef = useRef(null); // Ref for auto-scrolling
+
+
+
   useEffect(() => {
     socket = io(CONNECTION_PORT);
-  }, [CONNECTION_PORT]);
-
-  useEffect(()=>{
-    socket.on("receive_message", (data) =>{
-      setMessageList([...messageList, data]);
+  }, []); // No need for dependencies here, only runs once
+  
+  useEffect(() => {
+    socket.on("receive_message", (data) => {
+      setMessageList((prevList) => [...prevList, data]);
     });
-  });
+    // Clean up the listener on component unmount
+    return () => {
+      socket.off("receive_message");
+    };
+  }, []); // Empty dependency array
 
+  useEffect(() => {
+    // Auto-scroll to bottom when the message list updates
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messageList]);
+
+   
   const connectToRoom = () => {
     setLoggedIn(true);
     socket.emit('join_room', room);
   };
 
-  const sendMessage = async ()=>{
+  const sendMessage = async () => {
+    // Check if the message is empty or just spaces
+    if (message.trim() === "") return;
+  
     let messageContent = {
       room: room,
-      content:{
+      content: {
         author: userName,
-        message: message
+        message: message,
       },
     };
-    await socket.emit("send_message", messageContent)
-    setMessageList([...messageList, messageContent.content])
-    setMessage("")
-  };
   
+    await socket.emit("send_message", messageContent);
+    setMessageList((prevList) => [...prevList, messageContent.content]);
+    setMessage(""); // Clear the input field
+  };
+  //Using prevList ensures state updates are based on the latest state, avoiding issues with React's asynchronous updates.
+  
+
   return (
-    <div className="App">      
+    <div className="App">
       {!loggedIn ? (
         <div className="logIn">
           <div className='inputs'>
-          <input type="text" placeholder="Name....." onChange={(e) => {
-            setUserName(e.target.value);
-            }}
-          />
-          <input type='text' placeholder='Room.....' onChange={(e) => {
-            setRoom(e.target.value);
-            }}
-          />
+            <input type="text" placeholder="Name....." onChange={(e) => setUserName(e.target.value)} />
+            <input type='text' placeholder='Room.....' onChange={(e) => setRoom(e.target.value)} />
           </div>
           <button onClick={connectToRoom}>Enter Chat</button>
         </div>
       ) : (
         <div className="chatContainer">
           <div className="messages">
-            {messageList.map((val, key) => {
-              return(
-                <div className="messageContainer" id={val.author == userName ? "You" : "Other"}>
-                <div className="messageIndividual">{val.message}</div>
-                <h1>{val.author}</h1>
+            {messageList.map((val, key) => (
+              <div key={key} className="messageContainer" id={val.author === userName ? "You" : "Other"}>
+                <div className="messageIndividual">
+                  {val.author}: {val.message}
                 </div>
-              );
-            })}
+              </div>
+            ))}
+            <div ref={messagesEndRef} /> {/* Ref for auto-scroll */}
           </div>
-
           <div className="messageInputs">
-            <input type="text" placeholder="Message...." onChange={(e) => { setMessage(e.target.value);}} />
+            <input type="text" placeholder="Message...." value={message} onChange={(e) => setMessage(e.target.value)} />
             <button onClick={sendMessage}>Send</button>
           </div>
         </div>
@@ -154,3 +99,4 @@ function App() {
 }
 
 export default App;
+

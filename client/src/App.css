@@ -1,6 +1,7 @@
-body{
+body {
   padding: 0;
   margin: 0;
+  overflow: hidden; /* Prevent unnecessary scrollbars */
 }
 
 .App {
@@ -10,7 +11,7 @@ body{
   background-color: #2a2730;
 }
 
-.logIn{
+.logIn {
   width: 600px;
   height: 350px;
   border: 5px solid #0091ff;
@@ -19,9 +20,13 @@ body{
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  background-color: #1e1c24;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-.logIn input{
+/* Login form inputs */
+.logIn input {
   margin: 10px;
   width: 200px;
   height: 40px;
@@ -32,12 +37,11 @@ body{
   font-size: 17px;
 }
 
-.logIn input:focus{
+.logIn input:focus {
   outline: none;
-
 }
 
-.logIn button{
+.logIn button {
   width: 200px;
   height: 50px;
   border: none;
@@ -47,84 +51,114 @@ body{
   margin-top: 45px;
 }
 
-.logIn button:hover{
+.logIn button:hover {
   cursor: pointer;
   background-color: #005a9f;
 }
 
-.chatContainer{
+/* Chat container */
+.chatContainer {
   width: 600px;
-  height: 350px;
+  height: 80vh;
   border: 5px solid #0091ff;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 }
 
-.chatContainer .messages{
+.chatContainer .messages {
   flex: 80%;
   width: 100%;
-  padding-left: 20px;
+  padding: 10px 20px;
+  overflow-y: auto;
+  box-sizing: border-box;
+  background-color: #1e1c24;
+  scrollbar-width: none;
 }
 
-.chatContainer .messageInputs{
+.chatContainer .messages::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome, Safari, Edge */
+}
+
+.chatContainer .messageInputs {
   flex: 20%;
-  width: 100%;
   display: flex;
   flex-direction: row;
-
 }
 
 .chatContainer .messageInputs input {
   flex: 80%;
-  height: calc(100%-5px);
+  height: 100%;
   border: none;
   border-top: 5px solid #0091ff;
   padding-left: 20px;
-  font-size: 20px;
+  font-size: 18px;
+  box-sizing: border-box;
 }
+
 .chatContainer .messageInputs button {
   flex: 20%;
   height: 100%;
-  background-color:#0091ff;  
+  background-color: #0091ff;
   border: none;
   color: white;
   font-size: 18px;
 }
 
-.messageContainer{
+.messageContainer {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-.messageContainer h1{
-  color: white;
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: 300;
-  font-size: 17px;
-}
-.messageContainer #You{
-  color: white;
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: 300;
-  font-size: 17px;
-}
-.messageContainer #Other{
-  color: white;
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: 300;
-  font-size: 17px;
+  width: calc(100% - 30px);
 }
 
-.messageIndividual{
+#You {
+  justify-content: flex-start;
+}
+
+#Other {
+  justify-content: flex-end;
+}
+
+#Other .messageIndividual {
+  background-color: #005e21;
+}
+
+.messageIndividual {
   width: 200px;
-  height: 60px;
   border-radius: 10px;
-  display: grid;
-  place-items: center;
   background-color: #0091ff;
   color: white;
-  font-family: Arial, Helvetica, sans-serif;
-  margin-right: 10px;
+  padding: 10px;
   margin-top: 20px;
+  word-wrap: break-word;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* RESPONSIVENESS FOR MOBILE DEVICES */
+@media screen and (max-width: 768px) {
+  .logIn, .chatContainer {
+    width: 95%; /* Full width for smaller devices */
+    height: 80vh; /* Adjust height */
+  }
+
+  .logIn input,
+  .logIn button {
+    width: 90%; /* Inputs take up most of the width */
+    font-size: 14px; /* Smaller font size */
+  }
+
+  .chatContainer .messageInputs input {
+    font-size: 16px;
+    padding-left: 10px;
+  }
+
+  .chatContainer .messageInputs button {
+    font-size: 14px;
+  }
+
+  .messageIndividual {
+    width: auto; /* Allow messages to adapt to screen size */
+    max-width: 70%; /* Limit message bubble width */
+    font-size: 14px;
+  }
 }
