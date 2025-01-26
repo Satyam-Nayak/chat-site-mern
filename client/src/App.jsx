@@ -41,11 +41,23 @@ function App() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messageList]);
 
-   
+  //  new more optimised 
   const connectToRoom = () => {
+    if (!room) {
+      console.error('Room is not specified.');
+      return;
+    }
+    
     setLoggedIn(true);
     socket.emit('join_room', room);
   };
+
+  // previous one 
+  // const connectToRoom = () => {
+  //   setLoggedIn(true);
+  //   socket.emit('join_room', room);
+  // };
+  
 
   const sendMessage = async () => {
     // Check if the message is empty or just spaces
