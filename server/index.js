@@ -11,6 +11,7 @@ const server = app.listen(5002, () => {
     console.log("server is running on port 5002....")
 });
 
+// new some update 
 // io = socket(server);
 // ---------- new part this one -----
 const io = socket(server, {
