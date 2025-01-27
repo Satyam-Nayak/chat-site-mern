@@ -59,6 +59,9 @@ function App() {
   // };
   
 
+  // new readme
+  
+
   const sendMessage = async () => {
     // Check if the message is empty or just spaces
     if (message.trim() === "") return;
