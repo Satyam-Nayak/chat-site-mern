@@ -41,25 +41,12 @@ function App() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messageList]);
 
-  //  new more optimised 
+  
   const connectToRoom = () => {
-    if (!room) {
-      console.error('Room is not specified.');
-      return;
-    }
-    
     setLoggedIn(true);
     socket.emit('join_room', room);
   };
-
-  // previous one 
-  // const connectToRoom = () => {
-  //   setLoggedIn(true);
-  //   socket.emit('join_room', room);
-  // };
   
-
-  // new readme file for my project 
   
 
   const sendMessage = async () => {
